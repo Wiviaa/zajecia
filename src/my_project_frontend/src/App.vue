@@ -21,8 +21,15 @@ const calculateCost = async (index) => {
 }
 
 const kupWalute = async (index) => {
-  const koszta = iloscWaluty.map((ilosc, index) => calculateCost(ilosc, index)) 
-  const sum = koszta.reduce()
+  const koszta = await Promise.all(iloscWaluty.value.map((ilosc, index) => calculateCost(ilosc, index)))
+  const sum = koszta.reduce(
+    (al, val) => {
+      al + val
+    },
+    0
+  )
+
+  console.log(sum)
 }
 
 const onChange = (e, index) => {
@@ -50,7 +57,7 @@ getDataFromNBP()
         <td> {{ rate.code }} </td>
         <td> {{ rate.mid }} </td>
         <td> <input type="number" @change="(e) => onChange(e, index)" @keydown="(e) => onChange(e, index)"></td>
-        <button @click="kupWalute(index)"> Kup </button>
+        <button @click="kupWalute()"> Kup </button>
       </tr>
     </table>
   </main>
