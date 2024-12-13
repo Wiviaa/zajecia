@@ -12,13 +12,17 @@ const getDataFromNBP = async () => {
   iloscWaluty.value = jsonData[0].rates.map(() => 0)
 }
 
-const kupWalute = async (index) => {
-  console.log(rates.value[index])
-  const ilosc = BigInt(iloscWaluty.value)
+const calculateCost = async (index) => {
+  const ilosc = BigInt(iloscWaluty)
   const cena = BigInt(rates.value[index].mid * 10e16)
 
   const koszt = await my_project_backend.calculate_currency_price(ilosc, cena)
-  console.log(koszt / BigInt(10e16))
+  return koszt / BigInt(10e16)
+}
+
+const kupWalute = async (index) => {
+  const koszta = iloscWaluty.map((ilosc, index) => calculateCost(ilosc, index)) 
+  const sum = koszta.reduce()
 }
 
 const onChange = (e, index) => {
@@ -45,8 +49,8 @@ getDataFromNBP()
         <td> {{ rate.currency }} </td>
         <td> {{ rate.code }} </td>
         <td> {{ rate.mid }} </td>
-        <td> <input type="number" @change="(e) => onChange(e, index)"></td>
-        <td> <button @click="kupWalute(index)"> Kup </button></td>
+        <td> <input type="number" @change="(e) => onChange(e, index)" @keydown="(e) => onChange(e, index)"></td>
+        <button @click="kupWalute(index)"> Kup </button>
       </tr>
     </table>
   </main>
