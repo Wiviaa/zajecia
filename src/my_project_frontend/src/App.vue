@@ -14,6 +14,11 @@ const getDataFromNBP = async () => {
 
 const kupWalute = async (index) => {
   console.log(rates.value[index])
+  const ilosc = BigInt(iloscWaluty.value)
+  const cena = BigInt(rates.value[index].mid * 10e16)
+
+  const koszt = await my_project_backend.calculate_currency_price(ilosc, cena)
+  console.log(koszt / BigInt(10e16))
 }
 
 getDataFromNBP()
