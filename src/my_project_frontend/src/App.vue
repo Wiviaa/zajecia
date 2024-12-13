@@ -8,8 +8,8 @@ const iloscWaluty = ref(0)
 const getDataFromNBP = async () => {
   const res = await fetch("https://api.nbp.pl/api/exchangerates/tables/A/?format=json")
   const jsonData = await res.json();
-  console.log(jsonData)
   rates.value = jsonData[0].rates
+  iloscWaluty.value = jsonData[0].rates.map(() => 0)
 }
 
 const kupWalute = async (index) => {
@@ -21,6 +21,10 @@ const kupWalute = async (index) => {
   console.log(koszt / BigInt(10e16))
 }
 
+const onChange = (e, index) => {
+  iloscWaluty.value[index] = e.target.value
+}
+
 getDataFromNBP()
 </script>
 
@@ -29,6 +33,7 @@ getDataFromNBP()
     <img src="/logo2.svg" alt="DFINITY logo" />
     <br />
     <br />
+    {{ iloscWaluty }}
     <table>
       <tr>
         <th> Nazwa waluty </th>
@@ -40,7 +45,7 @@ getDataFromNBP()
         <td> {{ rate.currency }} </td>
         <td> {{ rate.code }} </td>
         <td> {{ rate.mid }} </td>
-        <td> <input type="number" v-model="iloscWaluty"></td>
+        <td> <input type="number" @change="(e) => onChange(e, index)"></td>
         <td> <button @click="kupWalute(index)"> Kup </button></td>
       </tr>
     </table>
