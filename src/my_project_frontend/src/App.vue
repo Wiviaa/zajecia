@@ -19,6 +19,6 @@ getDataFromNBP()
     <br />
     <br />
     <input v-model="input" type="text" />
-    {{ input }}
+    {{ input }} 
   </main>
 </template>
